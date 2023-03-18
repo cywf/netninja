@@ -1,0 +1,79 @@
+#!/bin/bash
+
+# Import the helper functions
+source ../lib/helpers.sh
+
+# Import the troubleshooting functions
+source ../lib/troubleshooting.sh
+
+# Define the usage message
+function usage {
+    echo "Usage: netninja [-h|--help] [OPTIONS]"
+    echo "Options:"
+    echo "  --version                Print the version of NetNinja"
+    echo "  --ping <ip>              Ping the specified IP address"
+    echo "  --dig <domain>           Perform a DNS lookup on the specified domain"
+    echo "  --traceroute <ip>        Perform a traceroute to the specified IP address"
+    echo "  --netstat                Display network connections and statistics"
+    echo "  --ps                     Display information about running processes"
+    echo "  --free                   Display system memory usage"
+    echo "  --lsblk                  Display information about available block devices"
+    echo "  --lsof                   Display information about open files"
+    echo "  --all                    Run all troubleshooting checks"
+    echo "  -h, --help               Display this help message"
+}
+
+# Define the main function
+function main {
+    # Parse command-line arguments
+    while [[ $# -gt 0 ]]; do
+        case $1 in
+            --version)
+                echo "NetNinja version 1.0"
+                exit 0
+                ;;
+            --ping)
+                ping_ip "$2"
+                shift
+                ;;
+            --dig)
+                dns_lookup "$2"
+                shift
+                ;;
+            --traceroute)
+                traceroute_ip "$2"
+                shift
+                ;;
+            --netstat)
+                netstat_info
+                ;;
+            --ps)
+                ps_info
+                ;;
+            --free)
+                free_info
+                ;;
+            --lsblk)
+                lsblk_info
+                ;;
+            --lsof)
+                lsof_info
+                ;;
+            --all)
+                run_all_checks
+                ;;
+            -h|--help)
+                usage
+                exit 0
+                ;;
+            *)
+                usage
+                exit 1
+                ;;
+        esac
+        shift
+    done
+}
+
+# Call the main function with command-line arguments
+main "$@"

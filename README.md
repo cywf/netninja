@@ -1,4 +1,7 @@
+![alt text](https://media.discordapp.net/attachments/1055231169479843870/1086803851056783481/cywf_ultra_realistic_Network_Ninja_in_a_cyberpunk_neon_age_who__d9457b3c-feb9-4969-b7d1-4e5d5e1dac3e.png?width=1138&height=1138)
+
 # NetNinja
+
 Streamline Linux server troubleshooting with NetNinja - the ultimate tool for network and system admins. Automate common checks like ping and process monitoring. Join the open-source community and contribute to the power of NetNinja!
 
 # Installation

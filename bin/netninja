@@ -33,34 +33,34 @@ function main {
                 exit 0
                 ;;
             --ping)
-                ping_ip "$2"
+                ping "$2"
                 shift
                 ;;
             --dig)
-                dns_lookup "$2"
+                dig "$2"
                 shift
                 ;;
             --traceroute)
-                traceroute_ip "$2"
+                traceroute "$2"
                 shift
                 ;;
             --netstat)
                 netstat_info
                 ;;
             --ps)
-                ps_info
+                ps
                 ;;
             --free)
-                free_info
+                free
                 ;;
             --lsblk)
-                lsblk_info
+                lsblk
                 ;;
             --lsof)
-                lsof_info
+                lsof
                 ;;
             --all)
-                run_all_checks
+                run all checks
                 ;;
             -h|--help)
                 usage

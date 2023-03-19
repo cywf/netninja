@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # Define the target directory for NetNinja
-NETNINJA_DIR=/opt/netninja
+NETNINJA_DIR="$(dirname "$(dirname "$(readlink -f "$0")")")"
 
 # Create the NetNinja directory and subdirectories if they do not exist
 mkdir -p $NETNINJA_DIR/{bin,lib,test,docs}

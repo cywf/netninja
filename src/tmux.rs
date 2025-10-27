@@ -1,6 +1,5 @@
 use anyhow::{Context, Result};
-use std::process::{Command, Stdio};
-use std::io::Write;
+use std::process::Command;
 
 pub struct TmuxSession {
     pub name: String,

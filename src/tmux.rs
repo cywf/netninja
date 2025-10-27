@@ -151,12 +151,10 @@ pub fn setup_dashboard_layout(session: &TmuxSession) -> Result<()> {
     session.split_horizontal(None)?;
     
     // Split left column into 3 rows
-    session.send_keys("0", "tmux select-pane -t 0")?;
     session.split_vertical(Some("0"))?;
     session.split_vertical(Some("1"))?;
     
-    // Split right column into 3 rows  
-    session.send_keys("0", "tmux select-pane -t 3")?;
+    // Split right column into 3 rows
     session.split_vertical(Some("3"))?;
     session.split_vertical(Some("4"))?;
     
@@ -170,12 +168,13 @@ pub fn setup_dashboard_layout(session: &TmuxSession) -> Result<()> {
 pub fn populate_panes(session: &TmuxSession) -> Result<()> {
     // Pane 0: Network Status
     session.send_keys("0", "clear")?;
-    session.send_keys("0", "watch -n 2 'netninja-cli status 2>/dev/null || echo \"Loading...\"'")?;
+    // Use basic commands to avoid recursion
+    session.send_keys("0", "watch -n 2 'ip addr show | grep -E \"^[0-9]|inet \" | head -20'")?;
     
     // Pane 1: iftop (live traffic)
     session.send_keys("1", "clear")?;
-    // Check if iftop is available, otherwise show message
-    session.send_keys("1", "if command -v iftop &> /dev/null; then sudo iftop -t -s 2; else echo 'iftop not installed. Install with: sudo apt-get install iftop'; sleep 3600; fi")?;
+    // Check if iftop is available, otherwise show message with short refresh
+    session.send_keys("1", "if command -v iftop &> /dev/null; then sudo iftop -t -s 2; else while true; do clear; echo 'iftop not installed. Install with: sudo apt-get install iftop'; echo ''; echo 'Alternative: Showing network stats'; cat /proc/net/dev | head -10; sleep 10; done; fi")?;
     
     // Pane 2: Security Alerts
     session.send_keys("2", "clear")?;

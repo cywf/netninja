@@ -103,11 +103,18 @@ fn check_network_connections() -> Result<Vec<SecurityAlert>> {
     // Count connections per IP
     let mut connection_counts: std::collections::HashMap<String, usize> = std::collections::HashMap::new();
     
+    // Configurable threshold - can be adjusted based on system capacity
+    const CONNECTION_THRESHOLD: usize = 50;
+    
     for line in output_str.lines().skip(1) {
-        if let Some(parts) = line.split_whitespace().nth(4) {
-            if let Some(ip) = parts.split(':').next() {
-                if !ip.starts_with("127.") && !ip.starts_with("::1") {
-                    *connection_counts.entry(ip.to_string()).or_insert(0) += 1;
+        let parts: Vec<&str> = line.split_whitespace().collect();
+        if parts.len() > 4 {
+            // Get the local address field
+            if let Some(addr) = parts.get(4) {
+                if let Some(ip) = addr.split(':').next() {
+                    if !ip.starts_with("127.") && !ip.starts_with("::1") && !ip.is_empty() {
+                        *connection_counts.entry(ip.to_string()).or_insert(0) += 1;
+                    }
                 }
             }
         }
@@ -115,7 +122,7 @@ fn check_network_connections() -> Result<Vec<SecurityAlert>> {
     
     // Alert on suspicious connection counts
     for (ip, count) in connection_counts {
-        if count > 50 {
+        if count > CONNECTION_THRESHOLD {
             alerts.push(SecurityAlert {
                 timestamp: Utc::now(),
                 severity: AlertSeverity::High,
